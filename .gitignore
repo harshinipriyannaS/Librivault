@@ -1,0 +1,47 @@
+# Environment files (NEVER commit these!)
+.env
+.env.local
+.env.production
+.env.development
+
+# Docker
+.docker/
+
+# Logs
+logs/
+*.log
+
+# Dependencies
+node_modules/
+target/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Build outputs
+dist/
+build/
+
+# Test coverage
+coverage/
+
+# Backend specific
+backend/target/
+backend/.mvn/
+backend/mvnw
+backend/mvnw.cmd
+
+# Frontend specific
+frontend/dist/
+frontend/.angular/
+frontend/node_modules/

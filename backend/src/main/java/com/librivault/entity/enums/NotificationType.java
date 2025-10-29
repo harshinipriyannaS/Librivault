@@ -1,0 +1,16 @@
+package com.librivault.entity.enums;
+
+public enum NotificationType {
+    WELCOME,
+    BORROW_REQUEST_APPROVED,
+    BORROW_REQUEST_DECLINED,
+    BOOK_DUE_REMINDER,
+    BOOK_OVERDUE,
+    SUBSCRIPTION_EXPIRY,
+    PAYMENT_SUCCESS,
+    PAYMENT_FAILED,
+    ROLE_CHANGED,
+    FINE_GENERATED,
+    FINE_PAID,
+    SYSTEM_ANNOUNCEMENT
+}
