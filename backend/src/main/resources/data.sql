@@ -1,20 +1,23 @@
 -- LibriVault Initial Data
 -- This file inserts initial data into the database
 
+-- Disable foreign key checks temporarily
+SET FOREIGN_KEY_CHECKS = 0;
+
 -- Insert default admin user (password: admin123)
-INSERT IGNORE INTO users ( email, password, first_name, last_name, role, reader_credits, active) VALUES
-( 'admin@librivault.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'System', 'Administrator', 'ADMIN', 0, TRUE);
+INSERT IGNORE INTO users (id, email, password, first_name, last_name, role, reader_credits, active) VALUES
+(1, 'admin@librivault.com', '$2a$12$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'System', 'Administrator', 'ADMIN', 0, TRUE);
 
 -- Insert sample librarian users (password: librarian123)
-INSERT IGNORE INTO users ( email, password, first_name, last_name, role, reader_credits, active) VALUES
-('librarian1@librivault.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'John', 'Smith', 'LIBRARIAN', 0, TRUE),
-('librarian2@librivault.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'Sarah', 'Johnson', 'LIBRARIAN', 0, TRUE);
+INSERT IGNORE INTO users (id, email, password, first_name, last_name, role, reader_credits, active) VALUES
+(2, 'librarian1@librivault.com', '$2a$12$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'John', 'Smith', 'LIBRARIAN', 0, TRUE),
+(3, 'librarian2@librivault.com', '$2a$12$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'Sarah', 'Johnson', 'LIBRARIAN', 0, TRUE);
 
 -- Insert sample reader users (password: reader123)
-INSERT IGNORE INTO users (email, password, first_name, last_name, role, reader_credits, active) VALUES
-( 'harshavardhaman1305@gmail.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'Alice', 'Brown', 'READER', 2, TRUE),
-( 'reader2@librivault.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'Bob', 'Wilson', 'READER', 0, TRUE),
-( 'reader3@librivault.com', '$2a$10$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'Carol', 'Davis', 'READER', 1, TRUE);
+INSERT IGNORE INTO users (id, email, password, first_name, last_name, role, reader_credits, active) VALUES
+(4, 'harshavardhaman1305@gmail.com', '$2a$12$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'Alice', 'Brown', 'READER', 2, TRUE),
+(5, 'reader2@librivault.com', '$2a$12$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'Bob', 'Wilson', 'READER', 0, TRUE),
+(6, 'reader3@librivault.com', '$2a$12$8.UnVuG9HHgffUDAlk8qfOuVGkqRzgVymGe07xd00DMxs.AQubh4a', 'Carol', 'Davis', 'READER', 1, TRUE);
 
 -- Insert librarian records
 INSERT IGNORE INTO librarians (id, user_id, employee_id, department, hire_date, active) VALUES
@@ -94,8 +97,11 @@ UPDATE books SET available_copies = available_copies - 1 WHERE id IN (1, 4);
 ALTER TABLE users AUTO_INCREMENT = 7;
 ALTER TABLE librarians AUTO_INCREMENT = 3;
 ALTER TABLE categories AUTO_INCREMENT = 9;
-ALTER TABLE books AUTO_INCREMENT = 10;
+ALTER TABLE books AUTO_INCREMENT = 15;
 ALTER TABLE subscriptions AUTO_INCREMENT = 4;
 ALTER TABLE borrow_requests AUTO_INCREMENT = 4;
 ALTER TABLE borrow_records AUTO_INCREMENT = 3;
 ALTER TABLE notifications AUTO_INCREMENT = 9;
+
+-- Re-enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;
