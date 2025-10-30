@@ -13,13 +13,13 @@ RUN npm ci
 COPY . .
 
 # Build the application for production
-RUN npm run build --prod
+RUN npm run build
 
 # Production stage
 FROM nginx:alpine
 
 # Copy built application from build stage
-COPY --from=build /app/dist/frontend /usr/share/nginx/html
+COPY --from=build /app/dist/librivault-frontend /usr/share/nginx/html
 
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
