@@ -98,4 +98,13 @@ public class HealthController {
         response.put("timestamp", LocalDateTime.now());
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<Map<String, Object>> test() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Backend is working!");
+        response.put("timestamp", LocalDateTime.now());
+        response.put("version", "1.0.0");
+        return ResponseEntity.ok(response);
+    }
 }

@@ -60,7 +60,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
                 // Public endpoints - allow registration and login
-                .requestMatchers("/auth/**", "/health/**", "/status", "/", "/api/health/**", "/api/status").permitAll()
+                .requestMatchers("/auth/**", "/health/**", "/status", "/test", "/", "/api/auth/**", "/api/health/**", "/api/status", "/api/test", "/api/", "/api/books/**", "/api/categories/**").permitAll()
                 // All other requests require authentication
                 .anyRequest().authenticated()
             )
