@@ -1,27 +1,31 @@
-FROM node:18-alpine
+# Build stage
+FROM node:18-alpine AS build
 
-# Set working directory
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies (including dev dependencies for ng serve)
+# Install dependencies
 RUN npm ci
 
 # Copy source code
 COPY . .
 
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S angular -u 1001
+# Build the application for production
+RUN npm run build --prod
 
-# Change ownership of the app directory
-RUN chown -R angular:nodejs /app
-USER angular
+# Production stage
+FROM nginx:alpine
+
+# Copy built application from build stage
+COPY --from=build /app/dist/frontend /usr/share/nginx/html
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port
 EXPOSE 4200
 
-# Start the development server
-CMD ["npm", "start", "--", "--host", "0.0.0.0", "--port", "4200"]
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

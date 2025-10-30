@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.librivault.com/api',
+  apiUrl: 'http://backend:8080/api',
   appName: 'LibriVault',
   version: '1.0.0'
 };

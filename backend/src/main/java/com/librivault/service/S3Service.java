@@ -35,7 +35,7 @@ public class S3Service {
     
     private static final Logger logger = LoggerFactory.getLogger(S3Service.class);
     
-    @Autowired
+    @Autowired(required = false)
     private S3Client s3Client;
     
     @Autowired
