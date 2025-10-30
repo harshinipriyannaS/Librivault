@@ -7,7 +7,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.librivault.repository.BookRepository;
@@ -15,7 +14,6 @@ import com.librivault.repository.CategoryRepository;
 import com.librivault.repository.UserRepository;
 
 @RestController
-@RequestMapping("/health")
 public class HealthController {
 
     @Autowired
@@ -27,7 +25,7 @@ public class HealthController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @GetMapping("")
+    @GetMapping("/health")
     public ResponseEntity<Map<String, Object>> health() {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "UP");
@@ -37,7 +35,7 @@ public class HealthController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/ready")
+    @GetMapping("/health/ready")
     public ResponseEntity<Map<String, Object>> readiness() {
         Map<String, Object> response = new HashMap<>();
         try {
@@ -89,6 +87,15 @@ public class HealthController {
             "books", "/api/books",
             "categories", "/api/categories"
         ));
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/status")
+    public ResponseEntity<Map<String, Object>> status() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "UP");
+        response.put("service", "LibriVault Backend");
+        response.put("timestamp", LocalDateTime.now());
         return ResponseEntity.ok(response);
     }
 }

@@ -37,9 +37,9 @@ services:
       - DB_HOST=database
       - DB_PORT=3306
       - DB_NAME=${DB_NAME:-librivault_db}
-      - DB_USERNAME=${DB_USERNAME:-librivault}
+      - DB_USERNAME=${DB_USERNAME:-root}
       - DB_PASSWORD=${DB_PASSWORD:-Harshini@258}
-      - JWT_SECRET=${JWT_SECRET:-librivault-super-secret-key-for-jwt-token-generation-minimum-32-chars}
+      - JWT_SECRET=${JWT_SECRET:-librivault-super-secret-key-for-jwt-token-generation-minimum-32-chars-hs256-algorithm-secure-key-2024}
       - CORS_ALLOWED_ORIGINS=http://localhost:4200
     ports:
       - "8080:8080"
