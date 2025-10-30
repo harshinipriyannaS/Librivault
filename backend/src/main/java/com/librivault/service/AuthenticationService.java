@@ -1,15 +1,8 @@
 package com.librivault.service;
 
-import com.librivault.dto.auth.JwtAuthenticationResponse;
-import com.librivault.dto.auth.LoginRequest;
-import com.librivault.dto.auth.RegisterRequest;
-import com.librivault.entity.Subscription;
-import com.librivault.entity.User;
-import com.librivault.entity.enums.Role;
-import com.librivault.entity.enums.SubscriptionType;
-import com.librivault.repository.UserRepository;
-import com.librivault.security.JwtTokenProvider;
-import com.librivault.security.UserPrincipal;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +15,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import com.librivault.dto.auth.JwtAuthenticationResponse;
+import com.librivault.dto.auth.LoginRequest;
+import com.librivault.dto.auth.RegisterRequest;
+import com.librivault.entity.Subscription;
+import com.librivault.entity.User;
+import com.librivault.entity.enums.Role;
+import com.librivault.entity.enums.SubscriptionType;
+import com.librivault.repository.UserRepository;
+import com.librivault.security.JwtTokenProvider;
+import com.librivault.security.UserPrincipal;
 
 @Service
 public class AuthenticationService {
@@ -86,7 +87,7 @@ public class AuthenticationService {
             logger.warn("Failed to send welcome email to user: {}", savedUser.getEmail(), e);
         }
         
-        // Generate JWT token
+        // Authenticate the newly registered user
         Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 registerRequest.getEmail(),

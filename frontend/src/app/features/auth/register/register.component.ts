@@ -153,15 +153,16 @@ import { RegisterRequest } from '@core/models/user.model';
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: calc(100vh - 128px);
-      padding: 2rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 1rem;
+      background: #f5f5f5;
     }
 
     .register-card {
       width: 100%;
-      max-width: 450px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
     }
 
     .register-header {

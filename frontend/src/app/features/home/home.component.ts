@@ -191,15 +191,16 @@ import { Book } from '@core/models/book.model';
   `,
   styles: [`
     .home-container {
-      min-height: calc(100vh - 128px);
+      min-height: 100vh;
+      background: #f8f9fa;
     }
 
     /* Hero Section */
     .hero-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
       color: white;
-      padding: 4rem 2rem;
-      min-height: 500px;
+      padding: 3rem 1rem;
+      min-height: 400px;
       display: flex;
       align-items: center;
     }
@@ -448,14 +449,18 @@ export class HomeComponent implements OnInit {
   }
 
   private loadPopularBooks(): void {
-    // Load first few books as popular books for demo
-    this.bookService.getAllBooks(0, 6).subscribe({
-      next: (response) => {
-        this.popularBooks = response.content;
-      },
-      error: (error) => {
-        console.error('Error loading popular books:', error);
-      }
-    });
+    // Only load books if user is authenticated to avoid connection errors on landing page
+    if (this.isAuthenticated) {
+      this.bookService.getAllBooks(0, 6).subscribe({
+        next: (response) => {
+          this.popularBooks = response.content;
+        },
+        error: (error) => {
+          console.error('Error loading popular books:', error);
+          // Don't show error to user, just keep empty array
+          this.popularBooks = [];
+        }
+      });
+    }
   }
 }

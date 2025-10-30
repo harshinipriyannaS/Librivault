@@ -171,7 +171,7 @@ jobs:
           DB_PASSWORD=${{ secrets.DB_PASSWORD }}
           
           # JWT Configuration
-          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          JWT_SECRET=librivault-super-secret-key-for-jwt-token-generation-minimum-32-chars-production
           
           # CORS Configuration
           CORS_ALLOWED_ORIGINS=http://${{ secrets.EC2_HOST }}:4200,http://localhost:4200
@@ -305,32 +305,66 @@ jobs:
           echo " Starting LibriVault application..."
           docker-compose up -d
           
-          # Wait for services to be ready
-          echo " Waiting for services to start..."
-          sleep 30
+          # Wait for database to be ready first
+          echo " Waiting for database to be ready..."
+          timeout=120
+          while [ $timeout -gt 0 ]; do
+            if docker-compose exec -T database mysqladmin ping -h localhost -u root -p${DB_PASSWORD} --silent; then
+              echo " Database is ready!"
+              break
+            fi
+            echo " Waiting for database... ($timeout seconds remaining)"
+            sleep 5
+            timeout=$((timeout-5))
+          done
           
-          # Check service status
-          echo " Checking service status..."
-          docker-compose ps
+          if [ $timeout -le 0 ]; then
+            echo " Database failed to start within timeout"
+            docker-compose logs database
+            exit 1
+          fi
           
-          # Test application endpoints
-          echo " Testing application endpoints..."
+          # Wait for backend to be ready
+          echo " Waiting for backend to be ready..."
+          timeout=180
+          while [ $timeout -gt 0 ]; do
+            if curl -f http://localhost:8080/api/health > /dev/null 2>&1; then
+              echo " Backend is ready!"
+              break
+            fi
+            echo " Waiting for backend... ($timeout seconds remaining)"
+            sleep 10
+            timeout=$((timeout-10))
+          done
           
-          # Test backend health
-          if curl -f http://localhost:8080/api/health > /dev/null 2>&1; then
-            echo " Backend is healthy and responding"
-          else
-            echo " Backend health check failed"
+          if [ $timeout -le 0 ]; then
+            echo " Backend failed to start within timeout"
             docker-compose logs backend
+            exit 1
           fi
           
-          # Test frontend
-          if curl -f http://localhost:4200 > /dev/null 2>&1; then
-            echo " Frontend is healthy and responding"
-          else
-            echo " Frontend health check failed"
+          # Wait for frontend to be ready
+          echo " Waiting for frontend to be ready..."
+          timeout=120
+          while [ $timeout -gt 0 ]; do
+            if curl -f http://localhost:4200 > /dev/null 2>&1; then
+              echo " Frontend is ready!"
+              break
+            fi
+            echo " Waiting for frontend... ($timeout seconds remaining)"
+            sleep 10
+            timeout=$((timeout-10))
+          done
+          
+          if [ $timeout -le 0 ]; then
+            echo " Frontend failed to start within timeout"
             docker-compose logs frontend
+            exit 1
           fi
+          
+          # Final health check
+          echo " Performing final health checks..."
+          docker-compose ps
           
           # Clean up unused Docker images
           echo "Cleaning up unused Docker images..."

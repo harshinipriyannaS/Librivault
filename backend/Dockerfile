@@ -15,14 +15,18 @@ RUN mvn clean package -DskipTests
 # Runtime stage
 FROM openjdk:21-jdk-slim
 
-# Install curl for health checks
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+# Install curl and mysql-client for health checks and database connectivity
+RUN apt-get update && apt-get install -y curl default-mysql-client && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
 # Copy the built jar from build stage
 COPY --from=build /app/target/librivault-backend-1.0.0.jar app.jar
+
+# Copy wait script
+COPY wait-for-db.sh wait-for-db.sh
+RUN chmod +x wait-for-db.sh
 
 # Create non-root user for security
 RUN addgroup --system spring && adduser --system spring --ingroup spring
@@ -35,5 +39,5 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:8080/api/health || exit 1
 
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Run the application with database wait
+ENTRYPOINT ["./wait-for-db.sh"]
