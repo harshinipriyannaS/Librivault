@@ -123,8 +123,8 @@ jobs:
         
     - name: Image digest
       run: |
-        echo "✅ Backend image pushed: ${{ steps.backend-meta.outputs.tags }}"
-        echo "✅ Frontend image pushed: ${{ steps.frontend-meta.outputs.tags }}"
+        echo "Backend image pushed: ${{ steps.backend-meta.outputs.tags }}"
+        echo "Frontend image pushed: ${{ steps.frontend-meta.outputs.tags }}"
 
   # Step 3: Deploy to EC2
   deploy:
@@ -141,27 +141,27 @@ jobs:
         key: ${{ secrets.EC2_PRIVATE_KEY }}
         port: 22
         script: |
-          echo "🚀 Starting deployment on EC2..."
+          echo " Starting deployment on EC2..."
           
           # Verify Docker is installed (should be pre-installed via user data script)
           if ! command -v docker &> /dev/null; then
-            echo "❌ Docker not found! Make sure EC2 instance was created with proper user data script"
+            echo " Docker not found! Make sure EC2 instance was created with proper user data script"
             exit 1
           fi
           
           if ! command -v docker-compose &> /dev/null; then
-            echo "❌ Docker Compose not found! Make sure EC2 instance was created with proper user data script"
+            echo "Docker Compose not found! Make sure EC2 instance was created with proper user data script"
             exit 1
           fi
           
-          echo "✅ Docker and Docker Compose are available"
+          echo " Docker and Docker Compose are available"
           
           # Create application directory
           mkdir -p ~/librivault-app
           cd ~/librivault-app
           
           # Create environment file
-          echo "📝 Creating environment configuration..."
+          echo " Creating environment configuration..."
           cat > .env << EOF
           # Database Configuration
           DB_HOST=database
@@ -200,7 +200,7 @@ jobs:
           EOF
           
           # Create production docker-compose file
-          echo "📝 Creating Docker Compose configuration..."
+          echo " Creating Docker Compose configuration..."
           cat > docker-compose.yml << 'EOF'
           services:
             # MySQL Database
@@ -294,50 +294,50 @@ jobs:
           EOF
           
           # Stop existing containers
-          echo "🛑 Stopping existing containers..."
+          echo " Stopping existing containers..."
           docker-compose down --remove-orphans || true
           
           # Pull latest images from Docker Hub
-          echo "📥 Pulling latest Docker images..."
+          echo " Pulling latest Docker images..."
           docker-compose pull
           
           # Start the application
-          echo "🚀 Starting LibriVault application..."
+          echo " Starting LibriVault application..."
           docker-compose up -d
           
           # Wait for services to be ready
-          echo "⏳ Waiting for services to start..."
+          echo " Waiting for services to start..."
           sleep 30
           
           # Check service status
-          echo "🔍 Checking service status..."
+          echo " Checking service status..."
           docker-compose ps
           
           # Test application endpoints
-          echo "🧪 Testing application endpoints..."
+          echo " Testing application endpoints..."
           
           # Test backend health
           if curl -f http://localhost:8080/api/health > /dev/null 2>&1; then
-            echo "✅ Backend is healthy and responding"
+            echo " Backend is healthy and responding"
           else
-            echo "❌ Backend health check failed"
+            echo " Backend health check failed"
             docker-compose logs backend
           fi
           
           # Test frontend
           if curl -f http://localhost:4200 > /dev/null 2>&1; then
-            echo "✅ Frontend is healthy and responding"
+            echo " Frontend is healthy and responding"
           else
-            echo "❌ Frontend health check failed"
+            echo " Frontend health check failed"
             docker-compose logs frontend
           fi
           
           # Clean up unused Docker images
-          echo "🧹 Cleaning up unused Docker images..."
+          echo "Cleaning up unused Docker images..."
           docker image prune -f
           
-          echo "🎉 Deployment completed successfully!"
-          echo "🌐 Application URLs:"
+          echo " Deployment completed successfully!"
+          echo "Application URLs:"
           echo "   Frontend: http://${{ secrets.EC2_HOST }}:4200"
           echo "   Backend API: http://${{ secrets.EC2_HOST }}:8080/api"
           echo "   Health Check: http://${{ secrets.EC2_HOST }}:8080/api/health"
