@@ -62,13 +62,11 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
-                // For development - allow ALL requests
-                .anyRequest().permitAll()
+                // Public endpoints
+                .requestMatchers("/auth/**", "/health", "/api/health").permitAll()
+                // All other requests need authentication
+                .anyRequest().permitAll() // Temporarily allow all for testing
             );
-        
-        // Completely disable authentication for development
-        // http.authenticationProvider(authenticationProvider());
-        // http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         
         return http.build();
     }
