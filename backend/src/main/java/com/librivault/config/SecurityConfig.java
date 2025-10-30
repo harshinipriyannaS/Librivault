@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import com.librivault.security.CustomUserDetailsService;
-import com.librivault.security.JwtAuthenticationEntryPoint;
 import com.librivault.security.JwtAuthenticationFilter;
 
 @Configuration
@@ -27,9 +26,6 @@ public class SecurityConfig {
     
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
-    
-    @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
     
     @Autowired
     private CorsConfigurationSource corsConfigurationSource;
@@ -64,7 +60,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
                 // Public endpoints - allow registration and login
-                .requestMatchers("/auth/**", "/health", "/api/health").permitAll()
+                .requestMatchers("/auth/**", "/health", "/health/**", "/api/health", "/api/health/**").permitAll()
                 // All other requests require authentication
                 .anyRequest().authenticated()
             )

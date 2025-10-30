@@ -15,7 +15,7 @@ import com.librivault.repository.CategoryRepository;
 import com.librivault.repository.UserRepository;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/health")
 public class HealthController {
 
     @Autowired
@@ -27,7 +27,7 @@ public class HealthController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @GetMapping("/health")
+    @GetMapping("")
     public ResponseEntity<Map<String, Object>> health() {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "UP");
@@ -37,7 +37,7 @@ public class HealthController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/health/ready")
+    @GetMapping("/ready")
     public ResponseEntity<Map<String, Object>> readiness() {
         Map<String, Object> response = new HashMap<>();
         try {

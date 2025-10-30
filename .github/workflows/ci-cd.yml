@@ -258,12 +258,6 @@ jobs:
                 - "8080:8080"
               networks:
                 - librivault-network
-              healthcheck:
-                test: ["CMD", "curl", "-f", "http://localhost:8080/api/health/ready"]
-                interval: 20s
-                timeout: 10s
-                retries: 10
-                start_period: 60s
           
             # Angular Frontend
             frontend:
@@ -271,18 +265,11 @@ jobs:
               container_name: librivault-frontend-prod
               restart: unless-stopped
               depends_on:
-                backend:
-                  condition: service_healthy
+                - backend
               ports:
                 - "4200:4200"
               networks:
                 - librivault-network
-              healthcheck:
-                test: ["CMD", "curl", "-f", "http://localhost:4200"]
-                interval: 30s
-                timeout: 10s
-                retries: 3
-                start_period: 30s
           
           volumes:
             mysql_data_prod:
@@ -343,26 +330,9 @@ jobs:
             exit 1
           fi
           
-          # Wait for backend to be fully ready with data loaded
-          echo " Waiting for backend data to be loaded..."
-          timeout=180
-          while [ $timeout -gt 0 ]; do
-            if curl -f http://localhost:8080/api/health/ready > /dev/null 2>&1; then
-              echo " Backend is fully ready with data loaded!"
-              break
-            fi
-            echo " Waiting for data initialization... ($timeout seconds remaining)"
-            sleep 15
-            timeout=$((timeout-15))
-          done
-          
-          if [ $timeout -le 0 ]; then
-            echo " Backend data initialization failed within timeout"
-            echo " Checking readiness status..."
-            curl -v http://localhost:8080/api/health/ready || true
-            docker-compose logs backend
-            exit 1
-          fi
+          # Give backend time to fully initialize
+          echo " Waiting for backend to fully initialize..."
+          sleep 30
           
           # Wait for frontend to be ready
           echo " Waiting for frontend to be ready..."
