@@ -26,12 +26,14 @@ import { FooterComponent } from './shared/components/footer/footer.component';
     
     .main-content {
       flex: 1;
-      padding-top: 64px; /* Account for fixed navbar */
+      padding-top: 80px; /* Account for fixed navbar height (70px + 10px buffer) */
+      min-height: calc(100vh - 80px);
     }
     
     @media (max-width: 768px) {
       .main-content {
-        padding-top: 56px;
+        padding-top: 70px; /* Mobile navbar height */
+        min-height: calc(100vh - 70px);
       }
     }
   `]

@@ -259,11 +259,11 @@ jobs:
               networks:
                 - librivault-network
               healthcheck:
-                test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
-                interval: 30s
+                test: ["CMD", "curl", "-f", "http://localhost:8080/api/health/ready"]
+                interval: 20s
                 timeout: 10s
-                retries: 3
-                start_period: 40s
+                retries: 10
+                start_period: 60s
           
             # Angular Frontend
             frontend:
@@ -324,21 +324,42 @@ jobs:
             exit 1
           fi
           
-          # Wait for backend to be ready
-          echo " Waiting for backend to be ready..."
-          timeout=180
+          # Wait for backend to be ready (basic health check)
+          echo " Waiting for backend to start..."
+          timeout=120
           while [ $timeout -gt 0 ]; do
             if curl -f http://localhost:8080/api/health > /dev/null 2>&1; then
-              echo " Backend is ready!"
+              echo " Backend is running!"
               break
             fi
-            echo " Waiting for backend... ($timeout seconds remaining)"
+            echo " Waiting for backend to start... ($timeout seconds remaining)"
             sleep 10
             timeout=$((timeout-10))
           done
           
           if [ $timeout -le 0 ]; then
             echo " Backend failed to start within timeout"
+            docker-compose logs backend
+            exit 1
+          fi
+          
+          # Wait for backend to be fully ready with data loaded
+          echo " Waiting for backend data to be loaded..."
+          timeout=180
+          while [ $timeout -gt 0 ]; do
+            if curl -f http://localhost:8080/api/health/ready > /dev/null 2>&1; then
+              echo " Backend is fully ready with data loaded!"
+              break
+            fi
+            echo " Waiting for data initialization... ($timeout seconds remaining)"
+            sleep 15
+            timeout=$((timeout-15))
+          done
+          
+          if [ $timeout -le 0 ]; then
+            echo " Backend data initialization failed within timeout"
+            echo " Checking readiness status..."
+            curl -v http://localhost:8080/api/health/ready || true
             docker-compose logs backend
             exit 1
           fi

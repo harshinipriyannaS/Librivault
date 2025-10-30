@@ -30,4 +30,9 @@ if [ $WAIT_TIME -ge $MAX_WAIT ]; then
 fi
 
 echo "Starting Spring Boot application..."
+
+# Add a small delay to ensure database is fully ready for connections
+echo "Waiting additional 10 seconds for database to be fully ready..."
+sleep 10
+
 exec java -jar app.jar

@@ -47,11 +47,11 @@ services:
     networks:
       - librivault-network
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
-      interval: 15s
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health/ready"]
+      interval: 20s
       timeout: 10s
-      retries: 5
-      start_period: 60s
+      retries: 10
+      start_period: 90s
 
   # Angular Frontend
   frontend:
