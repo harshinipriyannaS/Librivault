@@ -50,7 +50,7 @@ jobs:
       run: |
         cd frontend
         npm ci
-        npm run build --if-present
+        npm run build --configuration=production --if-present
         echo "✅ Frontend build successful"
 
   # Step 2: Build and Push Docker Images
@@ -174,7 +174,7 @@ jobs:
           JWT_SECRET=librivault-super-secret-key-for-jwt-token-generation-minimum-32-chars-production
           
           # CORS Configuration
-          CORS_ALLOWED_ORIGINS=http://${{ secrets.EC2_HOST }}:4200,http://localhost:4200
+          CORS_ALLOWED_ORIGINS=http://3.19.243.138:4200
           
           # AWS S3 Configuration
           AWS_S3_ENABLED=false
@@ -363,6 +363,6 @@ jobs:
           
           echo " Deployment completed successfully!"
           echo "Application URLs:"
-          echo "   Frontend: http://${{ secrets.EC2_HOST }}:4200"
-          echo "   Backend API: http://${{ secrets.EC2_HOST }}:8080/api"
-          echo "   Health Check: http://${{ secrets.EC2_HOST }}:8080/api/health"
+          echo "   Frontend: http://3.19.243.138:4200"
+          echo "   Backend API: http://3.19.243.138:8080/api"
+          echo "   Health Check: http://3.19.243.138:8080/api/health"

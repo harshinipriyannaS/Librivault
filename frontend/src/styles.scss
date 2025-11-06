@@ -1,25 +1,25 @@
 /* Global Styles */
 @use '@angular/material' as mat;
 
-// Custom theme colors - Library-inspired palette
-$primary-color: #2c3e50;    // Dark blue-gray (like old book covers)
-$secondary-color: #34495e;   // Slightly lighter blue-gray
-$accent-color: #e67e22;      // Warm orange (like autumn leaves)
-$success-color: #27ae60;     // Forest green
-$warn-color: #e74c3c;        // Warm red
-$info-color: #3498db;        // Sky blue
-$light-color: #ecf0f1;       // Light gray
-$dark-color: #2c3e50;        // Dark blue-gray
+// Updated Color Palette - Deep slate with emerald accent
+$primary-color: #334155;      // Slate-700 (deep blue-gray)
+$secondary-color: #64748b;    // Slate-500 (medium blue-gray)
+$accent-color: #10B981;       // Emerald-500 (bright green)
+$success-color: #059669;      // Emerald-600 (forest green)
+$warn-color: #E11D48;         // Rose-600 (warm red)
+$info-color: #6366F1;         // Indigo-500 (soft blue)
+$light-color: #F8FAFC;        // Gray-50 (very light)
+$dark-color: #0F172A;         // Slate-900 (dark blue-gray)
 
-// Include the common styles for Angular Material
+// Include Angular Material core styles
 @include mat.core();
 
-// Define custom palettes for library theme
-$app-primary: mat.define-palette(mat.$blue-grey-palette, 800);
-$app-accent: mat.define-palette(mat.$orange-palette, 600);
+// Define updated palettes for new color scheme
+$app-primary: mat.define-palette(mat.$blue-grey-palette, 700); // or custom with $primary-color
+$app-accent: mat.define-palette(mat.$green-palette, 500);
 $app-warn: mat.define-palette(mat.$red-palette, 600);
 
-// Create the theme object
+// Define theme object
 $app-theme: mat.define-light-theme((
   color: (
     primary: $app-primary,
@@ -28,45 +28,46 @@ $app-theme: mat.define-light-theme((
   )
 ));
 
-// Include theme styles for core and each component used in your app
+// Include Angular Material component themes based on custom palette
 @include mat.all-component-themes($app-theme);
 
-/* Global styles */
+/* Global resets and base styles */
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
   overflow-x: hidden;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+  color: $dark-color;
 }
 
-body {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  min-height: 100vh;
-  position: relative;
-}
-
-/* Ensure proper spacing for fixed navbar */
 * {
   box-sizing: border-box;
 }
 
-/* Fix any Material Design toolbar issues */
+/* Material Toolbar fixes */
 .mat-toolbar {
   position: relative !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: $primary-color !important;
+  color: white !important;
+  z-index: 1000 !important;
 }
 
 .mat-toolbar.navbar {
   position: fixed !important;
+  width: 100%;
 }
 
-/* Ensure main content doesn't overlap with navbar */
+/* Ensure main content doesn’t overlap navbar */
 app-root {
   display: block;
   min-height: 100vh;
+  padding-top: 70px;
 }
 
-/* Custom utility classes */
+/* Utility Classes */
 .text-primary {
   color: $primary-color !important;
 }
@@ -101,10 +102,10 @@ app-root {
 .p-4 { padding: 1.5rem !important; }
 .p-5 { padding: 3rem !important; }
 
-/* Card styles */
+/* Card Styles */
 .card {
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.1);
+  box-shadow: 0 4px 20px rgba(51, 65, 85, 0.1);
   transition: all 0.3s ease;
   background: white;
   border: none;
@@ -112,86 +113,43 @@ app-root {
 }
 
 .card:hover {
-  box-shadow: 0 8px 30px rgba(44, 62, 80, 0.15);
+  box-shadow: 0 8px 30px rgba(51, 65, 85, 0.15);
   transform: translateY(-2px);
 }
 
-/* Button styles */
+/* Button Styles */
 .btn-primary {
-  background-color: $primary-color;
+  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
   border-color: $primary-color;
+  color: white;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
 }
 
 .btn-primary:hover {
-  background-color: darken($primary-color, 10%);
-  border-color: darken($primary-color, 10%);
+  background: linear-gradient(135deg, darken($primary-color, 10%) 0%, darken($secondary-color, 10%) 100%);
+  box-shadow: 0 4px 12px rgba(51, 65, 85, 0.3);
+  transform: translateY(-1px);
 }
 
-/* Loading spinner */
-.loading-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
+.btn-accent {
+  background: linear-gradient(135deg, $accent-color 0%, darken($accent-color, 10%) 100%);
+  color: white;
 }
 
-/* Error message */
-.error-message {
-  color: $warn-color;
-  text-align: center;
-  padding: 1rem;
+.btn-accent:hover {
+  background: linear-gradient(135deg, darken($accent-color, 10%) 0%, darken($accent-color, 20%) 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  transform: translateY(-1px);
 }
 
-/* Success message */
-.success-message {
-  color: #4caf50;
-  text-align: center;
-  padding: 1rem;
-}
-
-/* Responsive utilities */
-@media (max-width: 768px) {
-  .container {
-    padding: 0 1rem;
-  }
-  
-  .card {
-    margin: 0.5rem 0;
-  }
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a8a8a8;
-}
-
-/* Material Design overrides */
-.mat-toolbar {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.mat-card {
-  border-radius: 8px;
-}
-
-.mat-button, .mat-raised-button, .mat-flat-button {
-  border-radius: 4px;
-}
-
-/* Form styles */
+/* Form Styles */
 .form-container {
   max-width: 400px;
   margin: 2rem auto;
@@ -203,7 +161,38 @@ app-root {
   margin-bottom: 1rem;
 }
 
+.form-label {
+  font-weight: 600;
+  color: $dark-color;
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  border-radius: 8px;
+  border: 2px solid #e9ecef;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: $primary-color;
+  box-shadow: 0 0 0 0.2rem rgba(51, 65, 85, 0.25);
+}
+
 /* Navigation styles */
+.navbar {
+  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%) !important;
+  box-shadow: 0 2px 20px rgba(51, 65, 85, 0.1);
+  padding: 1rem 0;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white !important;
+}
+
 .nav-link {
   color: white !important;
   text-decoration: none;
@@ -220,182 +209,7 @@ app-root {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Book card styles */
-.book-card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.book-card .card-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.book-card .card-footer {
-  margin-top: auto;
-}
-
-/* Status badges */
-.badge-success {
-  background-color: #28a745;
-}
-
-.badge-warning {
-  background-color: #ffc107;
-  color: #212529;
-}
-
-.badge-danger {
-  background-color: #dc3545;
-}
-
-.badge-info {
-  background-color: #17a2b8;
-}
-
-/* Table styles */
-.table-responsive {
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.table th {
-  background-color: #f8f9fa;
-  border-top: none;
-}
-
-/* Animation classes */
-.fade-in {
-  animation: fadeIn 0.3s ease-in;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.slide-in {
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-/* 
-Enhanced Layout & Alignment */
-.container-fluid {
-  padding: 0 2rem;
-}
-
-.main-content {
-  padding: 2rem 0;
-  min-height: calc(100vh - 120px);
-}
-
-.page-header {
-  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
-  color: white;
-  padding: 3rem 0;
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.page-title {
-  font-size: 2.5rem;
-  font-weight: 300;
-  margin-bottom: 0.5rem;
-}
-
-.page-subtitle {
-  font-size: 1.2rem;
-  opacity: 0.9;
-}
-
-/* Enhanced Grid System */
-.row {
-  margin: 0 -15px;
-}
-
-.col, .col-md-3, .col-md-4, .col-md-6, .col-md-8, .col-md-9, .col-md-12 {
-  padding: 0 15px;
-  margin-bottom: 2rem;
-}
-
-/* Better Button Styles */
-.btn {
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, darken($primary-color, 10%) 0%, darken($secondary-color, 10%) 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
-}
-
-.btn-accent {
-  background: linear-gradient(135deg, $accent-color 0%, darken($accent-color, 10%) 100%);
-  color: white;
-}
-
-.btn-accent:hover {
-  background: linear-gradient(135deg, darken($accent-color, 10%) 0%, darken($accent-color, 20%) 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
-}
-
-/* Enhanced Form Styles */
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-control {
-  border-radius: 8px;
-  border: 2px solid #e9ecef;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.form-control:focus {
-  border-color: $primary-color;
-  box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25);
-}
-
-.form-label {
-  font-weight: 600;
-  color: $dark-color;
-  margin-bottom: 0.5rem;
-}
-
-/* Enhanced Navigation */
-.navbar {
-  background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%) !important;
-  box-shadow: 0 2px 20px rgba(44, 62, 80, 0.1);
-  padding: 1rem 0;
-}
-
-.navbar-brand {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: white !important;
-}
-
-/* Book Grid Improvements */
+/* Book Card Styles */
 .book-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -407,7 +221,7 @@ Enhanced Layout & Alignment */
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.1);
+  box-shadow: 0 4px 20px rgba(51, 65, 85, 0.1);
   transition: all 0.3s ease;
   height: 100%;
   display: flex;
@@ -416,7 +230,7 @@ Enhanced Layout & Alignment */
 
 .book-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(44, 62, 80, 0.15);
+  box-shadow: 0 8px 30px rgba(51, 65, 85, 0.15);
 }
 
 .book-image {
@@ -454,7 +268,7 @@ Enhanced Layout & Alignment */
   padding-top: 1rem;
 }
 
-/* Status Badges Enhanced */
+/* Status Badges */
 .badge {
   padding: 0.5rem 1rem;
   border-radius: 20px;
@@ -477,7 +291,7 @@ Enhanced Layout & Alignment */
   color: white;
 }
 
-/* Dashboard Improvements */
+/* Dashboard Styles */
 .dashboard-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -490,13 +304,13 @@ Enhanced Layout & Alignment */
   border-radius: 12px;
   padding: 2rem;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(44, 62, 80, 0.1);
+  box-shadow: 0 4px 20px rgba(51, 65, 85, 0.1);
   transition: all 0.3s ease;
 }
 
 .stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(44, 62, 80, 0.15);
+  box-shadow: 0 8px 30px rgba(51, 65, 85, 0.15);
 }
 
 .stat-number {
@@ -565,8 +379,8 @@ Enhanced Layout & Alignment */
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-/* 
-Navbar Fixes */
+
+/* Navbar Fixes */
 .navbar-fixed-top-spacing {
   padding-top: 80px !important;
 }
@@ -576,11 +390,7 @@ Navbar Fixes */
   padding-top: 70px;
 }
 
-/* Fix any z-index issues */
-.mat-toolbar.navbar {
-  z-index: 1000 !important;
-}
-
+/* Fix z-index issues for menus */
 .mat-menu-panel {
   z-index: 1001 !important;
 }

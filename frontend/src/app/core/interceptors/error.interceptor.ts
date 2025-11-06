@@ -50,7 +50,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       // Don't show toast for certain endpoints or status codes
       const skipToast = req.url.includes('/auth/refresh') || error.status === 401;
-      
+
       if (!skipToast) {
         toastr.error(errorMessage, 'Error');
       }

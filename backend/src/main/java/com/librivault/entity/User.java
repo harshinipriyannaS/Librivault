@@ -1,5 +1,4 @@
 package com.librivault.entity;
-
 import com.librivault.entity.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -7,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

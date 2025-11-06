@@ -1,14 +1,9 @@
 package com.librivault.service;
 
-import com.librivault.dto.user.UserResponse;
-import com.librivault.entity.Category;
-import com.librivault.entity.Librarian;
-import com.librivault.entity.User;
-import com.librivault.entity.enums.Role;
-import com.librivault.repository.CategoryRepository;
-import com.librivault.repository.LibrarianRepository;
-import com.librivault.repository.UserRepository;
-import com.librivault.security.UserPrincipal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.librivault.dto.user.UserResponse;
+import com.librivault.entity.Category;
+import com.librivault.entity.Librarian;
+import com.librivault.entity.User;
+import com.librivault.entity.enums.Role;
+import com.librivault.repository.CategoryRepository;
+import com.librivault.repository.LibrarianRepository;
+import com.librivault.repository.UserRepository;
 
 @Service
 public class UserService {
