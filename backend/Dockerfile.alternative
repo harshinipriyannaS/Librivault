@@ -1,3 +1,4 @@
+# Alternative Dockerfile using Amazon Corretto (more reliable)
 # Multi-stage build for Spring Boot application
 FROM maven:3.9.4-eclipse-temurin-21 AS build
 
@@ -12,20 +13,17 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Runtime stage - Use Eclipse Temurin JDK (more reliable than JRE)
-FROM eclipse-temurin:21-jdk-jammy
+# Runtime stage - Use Amazon Corretto JRE
+FROM amazoncorretto:21-alpine-jdk
 
-# Install curl and mysql-client for health checks and database connectivity
-RUN apt-get update && \
-    apt-get install -y curl default-mysql-client && \
-    rm -rf /var/lib/apt/lists/* && \
-    apt-get clean
+# Install curl and mysql-client for health checks
+RUN apk add --no-cache curl mysql-client
 
 # Create application directory
 WORKDIR /app
 
-# Create non-root user for security (before copying files)
-RUN groupadd -r spring && useradd -r -g spring spring
+# Create non-root user for security
+RUN addgroup -S spring && adduser -S spring -G spring
 
 # Copy the built jar from build stage
 COPY --from=build /app/target/librivault-backend-1.0.0.jar app.jar

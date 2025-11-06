@@ -1,3 +1,4 @@
+# Simple Dockerfile using Ubuntu base with OpenJDK
 # Multi-stage build for Spring Boot application
 FROM maven:3.9.4-eclipse-temurin-21 AS build
 
@@ -12,31 +13,24 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Runtime stage - Use Eclipse Temurin JDK (more reliable than JRE)
-FROM eclipse-temurin:21-jdk-jammy
+# Runtime stage - Use Ubuntu with OpenJDK
+FROM ubuntu:22.04
 
-# Install curl and mysql-client for health checks and database connectivity
+# Install OpenJDK 21, curl and mysql-client
 RUN apt-get update && \
-    apt-get install -y curl default-mysql-client && \
+    apt-get install -y openjdk-21-jre-headless curl default-mysql-client && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
 # Create application directory
 WORKDIR /app
 
-# Create non-root user for security (before copying files)
-RUN groupadd -r spring && useradd -r -g spring spring
-
 # Copy the built jar from build stage
 COPY --from=build /app/target/librivault-backend-1.0.0.jar app.jar
 
 # Copy wait script and set permissions
 COPY wait-for-db.sh wait-for-db.sh
-RUN chmod +x wait-for-db.sh && \
-    chown -R spring:spring /app
-
-# Switch to non-root user
-USER spring:spring
+RUN chmod +x wait-for-db.sh
 
 # Expose port
 EXPOSE 8080
